@@ -1,0 +1,6 @@
+<p>appointment-list-component works!</p>
+<div *ngFor="let slot of availableSlots">
+  <p>Date et heure : {{ slot.attributes.date_time }}</p>
+  <p>Disponibilité : {{ slot.attributes.available ? 'Disponible' : 'Non disponible' }}</p>
+  <!-- Ajoutez d'autres informations du créneau ici -->
+</div>
