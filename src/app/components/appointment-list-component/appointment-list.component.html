@@ -1,6 +1,26 @@
-<p>appointment-list-component works!</p>
-<div *ngFor="let slot of availableSlots">
-  <p>Date et heure : {{ slot.attributes.date_time }}</p>
-  <p>Disponibilité : {{ slot.attributes.available ? 'Disponible' : 'Non disponible' }}</p>
-  <!-- Ajoutez d'autres informations du créneau ici -->
-</div>
+<table mat-table [dataSource]="timeslots" class="mat-elevation-z8">
+  <!-- Entêtes du tableau -->
+  <ng-container matColumnDef="timeslot">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let timeslot">{{ timeslot }}</td>
+  </ng-container>
+
+  <!-- Colonnes dynamiques pour les jours -->
+  <ng-container *ngFor="let day of days; let i = index">
+    <ng-container [matColumnDef]="'day' + i">
+      <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
+      <td mat-cell *matCellDef="let timeslot">
+        <ng-container *ngIf="isTimeslotAvailable(timeslot, i); else waitingRoomLink">
+          <button mat-raised-button color="primary" (click)="createAppointment(timeslot, i)">Réserver</button>
+        </ng-container>
+        <ng-template #waitingRoomLink>
+          <a [href]="getWaitingRoomLink(timeslot, i)" target="_blank" mat-button>Waiting Room</a>
+        </ng-template>
+      </td>
+    </ng-container>
+  </ng-container>
+
+  <!-- Colonnes statiques pour les créneaux horaires -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let timeslot; columns: displayedColumns;"></tr>
+</table>
